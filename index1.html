@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>NYT Test</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="reset.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+</head>
+
+<body>
+    
+
+    <body>
+        <div class="jumbotron jumbotron-fluid" class="header">
+            <div class="container">
+                <h1 class="display-3">New York Times Search</h1>
+            </div>
+        </div>
+        <!-- form -->
+        <section id="contact">
+            <div class="section-content">
+                <h1 class="section-header"> <span class="content-header wow fadeIn " data-wow-delay="0.2s" data-wow-duration="2s"></span></h1>
+                <h3></h3>
+            </div>
+            <div class="contact-section">
+                <div class="container">
+                    <form>
+                        <div class="col-md-6 form-line">
+                            <div class="form-group">
+                                <label for="exampleInputUsername">Search Term</label>
+                                <input type="text" class="form-control" id="search" placeholder=" Enter Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleSelect1">Number of Records to Retrive:</label>
+                                <select class="form-control" id="exampleSelect1">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="telephone">Start Year</label>
+                                <input type="tel" class="form-control" id="startYear" placeholder=" Start Year YYYYMMDD.">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="telephone">End Year</label>
+                                <input type="tel" class="form-control" id="endYear" placeholder=" Start Year YYYYMMDD.">
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-default submit"><i class="fa fa-paper-plane" aria-hidden="true"></i>Search</button>
+                            </div>
+                            <br>
+                            <div>
+                                <button type="button" class="btn btn-default submit"><i class="fa fa-paper-plane" aria-hidden="true"></i>Clear Results</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+        </section>
+        <div class="card">
+            <div class="card-header">
+                Top Articles
+            </div>
+            <div class="card-block">
+                <blockquote class="card-blockquote">
+                    <p></p>
+                </blockquote>
+            </div>
+        </div>
+        <div id="display"> </div>
+        <div class="card">
+  <div class="card-header">
+    Top Articles
+  </div>
+  <div class="card-block">
+    <blockquote class="card-blockquote">
+      <p></p>
+    </blockquote>
+  </div>
+        <script type="text/javascript">
+    
+      $(".submit").on("click", function(event) {
+ 
+        event.preventDefault();
+
+        var userInputname = $("#search").val();
+        var userInputstart = $("#startYear").val();
+        console.log(userInputstart);
+   
+ 
+  
+      
+        
+        var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+        url += '?' + $.param({
+            'api-key': "b36e3079409c45e2a76c6689e5c2a357",
+            'q': userInputname,
+            'begin_date': userInputstart,
+            'end_date': "20171221",
+            'hl': "true"
+        });
+        $.ajax({
+            url: url,
+            method: 'GET',
+        }).done(function(result) {
+            console.log(result);
+            for (var i = 0; i < 5; i++) {
+
+                var articleDiv = $("<div>");
+                var p = $("<p>").text(result.response.docs[i].snippet);
+                var author = $("<h4>").text(result.response.docs[i].byline.original)
+                var headline = $("<h2>").text(result.response.docs[i].headline.main)
+                var link = $("<a>").attr("href", result.response.docs[i].web_url).text("Link to story");
+                articleDiv.append(p);
+                articleDiv.prepend(author);
+                articleDiv.prepend(headline);
+                articleDiv.append(link)
+
+                $("#display").prepend(articleDiv);
+
+            }
+        });
+        // .fail(function(err) {
+        //     throw err;
+        // });
+        });
+        </script>
+    </body>
+
+</html>
